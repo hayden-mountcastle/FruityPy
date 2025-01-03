@@ -1,0 +1,42 @@
+{% extends "fruity/layout.html" %}
+
+{% block body %}
+    
+
+
+    <div style="text-align: center;">
+    <h2>Your Fruity Profile</h2>
+    </div>
+    {% if current_recipes %}
+        
+        <h4><strong> Times used profile (Primary)</strong> </h4> 
+        <p>You're a total <strong> {{fruit_name|upper}} </strong>!</p>
+        <p>Woah, you really like {{fruit_name|lower}}. You used this delicious fruit in {{most_used_fruit.count}} different recipes. No wonder, {{fruit_name|lower}} has many yummy use cases! </p>
+        
+        <strong>My {{fruit_name}} profile </strong>
+        <p> {{ fruit_snapshot }}</p>
+        <p> {{ fruit_profile }}</p>
+    
+        <br>
+
+        
+        <h4> <strong>Quantity Profile (Secondary)</strong></h4>
+        <p>You could not get enough of <strong> {{fruit_name_quantity|upper}} </strong>!</p>
+        <p>You loooove {{fruit_name_quantity|lower}}. You used {{most_quantity_fruit.total_quantity}}00g of the stuff overall in your recipes. Good thing {{fruit_name_quantity}} is always part of a well-balanced diet.</p>
+        
+        <strong>My {{fruit_name_quantity}} profile </strong>
+        <p> {{ fruit_snapshot_quantity }}</p>
+        <p> {{ fruit_profile_quantity }}</p>
+        
+
+    {% else %}
+        <div class="no-recipes" style="display: flex; align-items: center; justify-content: center; height: 20vh; text-align: center;">
+            <div>
+                <strong>You need to add some fruity recipes so we can build your fruity profile!</strong>
+                <p>Why not add one?</p>
+                <a class="btn btn-primary" href="{% url 'recipe' %}">Add a Recipe</a>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

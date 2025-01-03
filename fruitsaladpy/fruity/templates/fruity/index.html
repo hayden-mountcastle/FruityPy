@@ -1,0 +1,126 @@
+{% extends "fruity/layout.html" %}
+
+
+
+{% block body %}
+
+<style>
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.item {
+    width: calc(33.333% - 20px);  /* Adjust for better spacing */
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.item:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.image {
+    width: 100%;
+    height: 200px;  /* Fixed height to make the boxes more square */
+    object-fit: cover;
+}
+
+.content {
+    padding: 16px;
+    text-align: left;
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.description {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* To make the whole item box clickable as a link
+Got from here: */
+/* https://stackoverflow.com/questions/8160494/how-to-make-a-whole-div-clickable-in-html-and-css-without-javascript */
+/* There is a bug where if the mouse is on the right side in certain places the boxes flash. Not sure how to fix this */
+a.fill-div {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+
+</style>
+    <form action="{% url 'view_cat' %}" method="POST">
+        {% csrf_token %}
+        <select id="category" name="category">
+            <option value="Filter by category" disabled selected>Filter by category</option>
+            {% for category in active_categories %}
+                <option value="{{ category.categoryName }}">{{ category.categoryName }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    
+    <div style="text-align: center;">
+    <h2>All Fruit Recipes</h2>
+
+    <div class="container" >
+        {% for recipe in current_recipes %}
+    <div class="item">
+        <a class="fill-div" href="{% url 'view_recipe' id=recipe.id %}"></a>
+        <img src="{{ recipe.imageUrl }}" alt="{{ recipe.title }}" class="image">
+        <div class="content">
+            <h3 class="title">{{ recipe.title }}</h3>
+            <strong>By: {{ recipe.owner }} </strong>
+            <p class="description"><strong> Total calories: {{ recipe.total_calories|floatformat:2 }}</strong></p>
+            <p class="description">Total sugar: {{ recipe.total_sugar|floatformat:2 }}</p>
+            <p class="description">Total fat: {{ recipe.total_fat|floatformat:2 }}</p>
+            <p class="description">Total fiber: {{ recipe.total_fiber|floatformat:2 }}</p>
+            <p class="description">Total protein: {{ recipe.total_protein|floatformat:2 }}</p>
+            <p class="description">Category: {{ recipe.category}}</p>
+        </div>
+    </div>
+{% empty %}
+    {% if user.is_authenticated %}
+        <div style="display: flex; align-items: center; justify-content: center; height: 20vh; text-align: center;">
+            <div>
+                <strong>There are no recipes in that category yet!</strong>
+                <p>Why not add one?</p>
+                <a class="btn btn-primary" href="{% url 'recipe' %}">Add a Recipe</a>
+            </div>
+        </div>
+    {% else %}
+        <div style="display: flex; align-items: center; justify-content: center; height: 20vh; text-align: center;">
+            <div>
+                <strong>There are no recipes in that category yet!</strong>
+                <p>Register to create recipes</p>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+    </div>
+
+
+    </div>
+    
+
+{% endblock %}

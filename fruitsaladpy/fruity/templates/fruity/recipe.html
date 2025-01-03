@@ -1,0 +1,458 @@
+{% extends "fruity/layout.html" %}
+
+{% block title %}Make a recipe!{% endblock %}
+
+{% load static %}  <!-- Load the static tag at the top -->
+
+{% block body %}
+    <style>
+        /*For the API javascript*/ 
+        
+                /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .fruit-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .fruit-label {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .fruit-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .fruit-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            background-color: #007bff;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .recipe-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 0 20px;
+        }
+
+        .recipe-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f1f3f5;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #333;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .totals-container {
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 8px;
+        }
+
+        .totals-container h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .totals-item {
+            font-size: 16px;
+            margin: 5px 0;
+            color: #495057;
+        }
+
+        .totals-item strong {
+            font-weight: bold;
+            color: #212529;
+        }
+        
+        
+        /* General form styles */
+        .recipe-form {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+        text-align: center;
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 20px;
+        }
+
+        .form-group {
+        margin-bottom: 15px;
+        }
+
+        label {
+        font-size: 1rem;
+        color: #333;
+        margin-bottom: 8px;
+        display: block;
+        }
+
+        input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        }
+
+        input[type="number"] {
+        -moz-appearance: textfield; /* Remove spin button on numbers in some browsers */
+        }
+
+        textarea {
+        height: 120px;
+        resize: vertical;
+        }
+
+        button {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        }
+
+        button[type="submit"]:hover {
+        background-color: #0056b3;
+        }
+
+        button[type="button"].btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        }
+
+        button[type="button"].btn-secondary:hover {
+        background-color: #5a6268;
+        }
+
+        /* Styling for ingredient section */
+        #ingredients-container {
+        margin-bottom: 20px;
+        }
+
+        h4 {
+        font-size: 1.3rem;
+        color: #333;
+        margin-bottom: 15px;
+        }
+
+        .ingredient {
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+        .recipe-form {
+            padding: 15px;
+        }
+
+        input, select, textarea {
+            font-size: 0.9rem;
+        }
+        }
+
+
+
+
+    </style>
+    <h2>Nutrition</h2>
+
+    <div style="text-align: center">
+        <br>
+        <strong>
+            We have data on all sorts of yummy and nutritious fruits.<br>
+
+            Plan your recipes by looking up your fruits' nutritional contents!
+
+            {{test}}
+        </strong>
+        
+        <br>
+        <br>
+
+    </div>
+ 
+
+
+    <div class="fruit-form">
+        <label for="fruit-input" class="fruit-label">Add a Fruit:</label>
+    
+        <select class="fruit-select" name="fruit-input-group" id="fruit-select">
+            <option value="">Select a fruit</option>
+            {% for fruit in fruit_names %}
+            <option value="{{ fruit }}">{{ fruit }}</option>
+            {% endfor %}
+        </select>
+        <button id="add-fruit-button" class="btn btn-primary">Look up fruit</button>
+
+        <li id="recipe-list" class="recipe-list"></li>
+    
+        <div class="totals-container">
+            <h3 style="text-align: center";>Your potential recipe's total nutrition</h3>
+            <div class="totals-item"><strong>Total Sugar:</strong> <span id="total-sugar">0.00</span>g</div>
+            <div class="totals-item"><strong>Total Fat:</strong> <span id="total-fat">0.00</span>g</div>
+            <div class="totals-item"><strong>Total Fiber:</strong> <span id="total-fiber">0.00</span>g</div>
+            <div class="totals-item"><strong>Total Protein:</strong> <span id="total-protein">0.00</span>g</div>
+            <div class="totals-item"><strong>Total Calories:</strong> <span id="total-calories">0.00</span></div>
+        </div>
+    </div>
+
+    <div>
+        <label for="fruit-input"></label>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const addFruitButton = document.getElementById('add-fruit-button');
+            const fruitInput = document.getElementById('fruit-input');
+            const recipeList = document.getElementById('recipe-list');
+            const totalSugarElement = document.getElementById('total-sugar');
+            const totalCaloriesElement = document.getElementById('total-calories');
+            const totalFatElement = document.getElementById('total-fat');
+            const totalFiberElement = document.getElementById('total-fiber');
+            const totalProteinElement = document.getElementById('total-protein');
+
+            let totalSugar = 0;
+            let totalCalories = 0;
+            let totalFat = 0;
+            let totalFiber = 0;
+            let totalProtein = 0;
+            
+            addFruitButton.addEventListener('click', function() {
+                const fruitSelect = document.getElementById('fruit-select'); // Use the correct ID
+                const fruitName = fruitSelect.value.trim().toLowerCase(); // Get the selected fruit value
+
+                if (!fruitName) {
+                    alert('Please select a fruit.');
+                    return;
+                }
+
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                const apiUrl = `https://www.fruityvice.com/api/fruit/${fruitName}/`;
+
+                fetch(`${proxyUrl}${apiUrl}`)
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                            // Add fruit details to the recipe list
+                            const listItem = document.createElement('li');
+                            const fiber_round = data.nutritions.carbohydrates - data.nutritions.sugar;
+                            listItem.textContent = `${data.name} - Sugar: ${data.nutritions.sugar}g, Calories: ${data.nutritions.calories}, Fat: ${data.nutritions.fat}, Fiber: ${fiber_round.toFixed(2)}, Protein: ${data.nutritions.protein}`;
+                            recipeList.appendChild(listItem);
+
+                            // Update total sugar and calories
+                            totalSugar += data.nutritions.sugar;
+                            totalCalories += data.nutritions.calories;
+                            totalFat += data.nutritions.fat;
+                            totalFiber += fiber_round;
+                            totalProtein += data.nutritions.protein;
+
+                            totalSugarElement.textContent = totalSugar.toFixed(2);
+                            totalCaloriesElement.textContent = totalCalories.toFixed(2);
+                            totalFatElement.textContent = totalFat.toFixed(2);
+                            totalFiberElement.textContent = totalFiber.toFixed(2);
+                            totalProteinElement.textContent = totalProtein.toFixed(2);
+
+                            // Autopopulate ingredients form fields
+                            const ingredientsContainer = document.getElementById('ingredients-container');
+                            const ingredientFields = ingredientsContainer.querySelector('.ingredient');
+
+                            ingredientFields.querySelector('#ingredient').value = data.name;
+                            ingredientFields.querySelector('#sugar').value = data.nutritions.sugar.toFixed(2);
+                            ingredientFields.querySelector('#calories').value = data.nutritions.calories.toFixed(2);
+                            ingredientFields.querySelector('#fat').value = data.nutritions.fat.toFixed(2);
+                            ingredientFields.querySelector('#fiber').value = fiber_round.toFixed(2);
+                            ingredientFields.querySelector('#protein').value = data.nutritions.protein.toFixed(2);
+
+                            // Clear the input field
+                            fruitInput.value = '';
+                        })
+            });
+        });
+
+        </script>
+
+
+    <form method="POST" class="recipe-form">
+        {% csrf_token %}
+        
+        <h2>Create a New Fruity Recipe</h2>
+        
+        <!-- Recipe Title -->
+        <div class="form-group">
+            <label for="title">Recipe Title:</label>
+            <input type="text" name="title" id="title" placeholder="Enter the recipe title" required>
+        </div>
+        
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" placeholder="Describe the recipe" required></textarea>
+        </div>
+        
+        <!-- Image URL -->
+        <div class="form-group">
+            <label for="imageUrl">Image URL:</label>
+            <input type="url" name="imageUrl" id="imageUrl" placeholder="Enter the image URL">
+        </div>
+        
+        <!-- Category -->
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">Select a category</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.categoryName }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+
+        <div id="ingredients-container">
+            <h4>Ingredients</h4>
+            <div class="ingredient">
+
+                <div class="form-group">
+                    <label for="ingredient">Ingredient Name:</label>
+                    <input type="text" name="ingredients[]" id="ingredient" placeholder="Enter ingredient name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity[]" id="quantity" placeholder="Enter quantity" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sugar">Sugar (g/100g):</label>
+                    <input type="number" step="0.01" name="sugars[]" id="sugar" placeholder="Enter sugar amount" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fat">Fat (g/100g):</label>
+                    <input type="number" step="0.01" name="fats[]" id="fat" placeholder="Enter fat amount" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fiber">Fiber (g/100g):</label>
+                    <input type="number" step="0.01" name="fibers[]" id="fiber" placeholder="Enter fiber amount" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="protein">Protein (g/100g):</label>
+                    <input type="number" step="0.01" name="proteins[]" id="protein" placeholder="Enter protein amount" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="calories">Calories (kcal/100g):</label>
+                    <input type="number" step="0.01" name="calories[]" id="calories" placeholder="Enter calories amount" required>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <div class="form-group">
+
+            <!-- Add Ingredient Button -->
+            <div class="form-group">
+                <button type="button" id="add-ingredient" class="btn btn-secondary">+ Add a Fruit</button>
+            </div>
+
+            <!-- Remove Ingredient Button -->
+            <div class="form-group">
+                <button type="button" id="remove-ingredient" class="btn btn-secondary">- Remove a Fruit</button>
+            </div>
+
+
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Create Recipe</button>
+        </div>
+    </form>
+    
+    <script>
+        // JavaScript to dynamically add ingredient fields
+        document.getElementById("add-ingredient").addEventListener("click", function() {
+            const container = document.getElementById("ingredients-container");
+            const lastIngredientDiv = container.querySelector(".ingredient:last-child");
+
+            // Clone the last ingredient field
+            const ingredientDiv = lastIngredientDiv.cloneNode(true);
+
+            // Append the cloned ingredient field below the last one
+            container.appendChild(ingredientDiv);
+        });
+
+        // JavaScript to remove the last ingredient field
+        document.getElementById("remove-ingredient").addEventListener("click", function() {
+            const container = document.getElementById("ingredients-container");
+
+            // Only remove if more than one ingredient field exists
+            if (container.children.length > 1) {
+                const lastIngredientDiv = container.querySelector(".ingredient:last-child");
+
+                // Remove the last ingredient field
+                container.removeChild(lastIngredientDiv);
+            }
+        });
+    </script>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,183 @@
+{% extends "fruity/layout.html" %}
+
+{% block body %}
+
+<!-- Inline Styles -->
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .img {
+            width: 500px;
+            height: 500px;
+            object-fit: cover; /* This will ensure the image maintains its aspect ratio while filling the 200px square */
+    }
+
+    .recipe-container {
+        max-width: 800px;
+        margin: 40px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .recipe-title {
+        font-size: 2.5em;
+        text-align: center;
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    .recipe-description {
+        font-size: 1.2em;
+        text-align: center;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .nutrition-info {
+        background-color: #f7f7f7;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .nutrition-info h4 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        color: black;
+    }
+
+    .nutrition-item {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .nutrition-item strong {
+        font-weight: bold;
+    }
+
+    .nutrition-item.calories {
+        font-size: 1.3em;
+        color: black;
+    }
+
+    .ingredients {
+        margin-top: 30px;
+    }
+
+    .ingredients h2 {
+        font-size: 2em;
+        color: black;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .ingredients p {
+        font-size: 1.1em;
+        text-align: center;
+        color: #777;
+        margin-bottom: 20px;
+    }
+
+    .ingredient {
+        margin-bottom: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        font-size: 1em;
+        color: #333;
+    }
+
+    .ingredient strong {
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    .ingredient br {
+        margin-bottom: 5px;
+    }
+
+    /* Hover Effects */
+    .ingredient:hover, .nutrition-item:hover {
+        background-color: #fafafa;
+        transform: scale(1.02);
+        transition: all 0.3s ease;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+        .recipe-container {
+            padding: 15px;
+        }
+
+        .recipe-title {
+            font-size: 2em;
+        }
+
+        .recipe-description {
+            font-size: 1em;
+        }
+
+        .nutrition-info, .ingredients {
+            padding: 15px;
+        }
+
+
+    }
+</style>
+    <div class="recipe-container">
+        <h1 class="recipe-title">{{ click_recipe.title }}</h1>
+        <img src="{{ click_recipe.imageUrl }}" class = "img">
+        <p class="recipe-description">{{ click_recipe.description }}</p>
+
+        <div class="nutrition-info">
+            <h4>Total Nutrition</h4>
+            <ul>
+                <li class="nutrition-item">
+                    <strong>Total Sugar:</strong> {{ click_recipe.total_sugar|floatformat:2 }}g
+                </li>
+                <li class="nutrition-item">
+                    <strong>Total Fat:</strong> {{ click_recipe.total_fat|floatformat:2 }}g
+                </li>
+                <li class="nutrition-item">
+                    <strong>Total Fiber:</strong> {{ click_recipe.total_fiber|floatformat:2 }}g
+                </li>
+                <li class="nutrition-item">
+                    <strong>Total Protein:</strong> {{ click_recipe.total_protein|floatformat:2 }}g
+                </li>
+                <li class="nutrition-item calories">
+                    <strong>Calories:</strong> <span>{{ click_recipe.total_calories|floatformat:2 }}</span> kcal
+                </li>
+            </ul>
+        </div>
+
+        <div class="ingredients">
+            <h2>Ingredients</h2>
+            <p>Blend, mix, chop, or freeze these up for a delicious fruity snack!</p>
+            <ul>
+                {% for ingredient in current_ingredients %}
+                    <li class="ingredient">
+                        <strong>{{ ingredient.name }} (x {{ ingredient.quantity }}00g)</strong><br>
+                        Sugar: {{ ingredient.sugar|floatformat:2 }}g<br>
+                        Calories: {{ ingredient.calories|floatformat:2 }} kcal<br>
+                        Fat: {{ ingredient.fat|floatformat:2 }}g<br>
+                        Fiber: {{ ingredient.fiber|floatformat:2 }}g<br>
+                        Protein: {{ ingredient.protein|floatformat:2 }}g
+                    </li>
+                {% empty %}
+                    <li>No ingredients found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+

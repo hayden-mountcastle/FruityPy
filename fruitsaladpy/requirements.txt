@@ -1,0 +1,29 @@
+
+Required installations:
+
+pip install django-cors-headers
+Pip install os 
+Pip install requests
+Pip install json 
+
+
+IMPORTANT: 
+To avoid CORs errors from the Fruityvice API (https://www.fruityvice.com/) you may have to run this in your terminal (Mac):
+
+git clone https://github.com/Rob--W/cors-anywhere.git
+cd cors-anywhere/
+npm install
+heroku create
+git push heroku master
+
+
+If the API is still not working please visit https://cors-anywhere.herokuapp.com/corsdemo and click "Request temporary access to the demo server". This will give temporary access and then will work properly. You should only have to do this once but may have to do it again your computer shuts off or restarting the program.
+
+
+JSON:
+The JSON file with "fruity profiles" located in the main folder (fruitsaladpy). 
+It is accessed in the fruity_profile() view. You will have to change the path to this file on your local computer. 
+
+Currently it is set as: 
+path = os.path.expanduser("~/Desktop/Hayden/CS-33a/Final_Project/fruitsaladpy/FruityProfiles_4.json")
+

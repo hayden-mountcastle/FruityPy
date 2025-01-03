@@ -1,0 +1,19 @@
+body {
+    padding: 10px;
+}
+
+
+#fruit-input {
+    margin-right: 10px;
+  }
+  
+#recipe-list {
+    margin-top: 10px;
+    list-style: none;
+    padding: 0;
+  }
+
+
+
+
+ 
