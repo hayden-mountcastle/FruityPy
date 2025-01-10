@@ -23,6 +23,7 @@ A. PURPOSE:
 FUNCTIONALITY: 
 
 1. ADDING RECIPES
+   
 Fruity vice apis are called using Javascript fetch command in recipe.html. When "Look up fruit" is clicked, the API will be called and the below items will be autofilled with the selected fruit's sugar, fat, fiber (calculated from carbohydrates - sugar), protein, and calories. When adding another fruit, the function will be called again with the new fruits nutritional information. The total nutrition will sum all looked up fruits together. The list of fruits is calculated via the https://www.fruityvice.com/api/fruit/all/ API (accessed using python) which is then made into a list based off of "name". Fruits  names of more than one word (eg Horned Melon) are removed as this confused the API. 
 
 Below will be the "Create a New Fruity Recipe" option where details about the recipe can be added. Recipe title, description, and category are required; a pop up will occur if they are not filled out at the time of pressing "Create Recipe". An image URL is optional. 
@@ -37,7 +38,6 @@ Users are able to add fruit to their recipes, as well as remove fruit. This comm
 The index of the website is the "Fruit Recipes" page where users (authenticated or not) can see recipes made by other users. They are presented as clickable cards of 3 rows that display the title, creator, total calories, total sugar, total fat, total fiber, total protein, and category. Animations occur as the mouse hovers over the recipe. Users can click anywhere on the card to view the full recipe/nutritional content. 
 
 In Index (Fruit Recipes), users are able to filter recipes based off of their selected category. This is calculated via a lift of the categories specified by the admin. There is no way to add categories apart from through the admin.  If authenticated and there is no available recipe for a category, the user will be invited to add a recipe. If not authenticated, the user will be encourage to register for an account. 
-
 
 When clicked, users are brought to the specific recipes page as "view_recipes/recipe.id". The layout is designed such that users are greeted with the title and large photo of the recipe, with the description as the caption. Total nutrition is below in apparent text, with calories bolded. Finally below this, ingredients are listed with their quantities and total nutritional contributions to the recipe per gram. The instructions are simple, merely "Blend, mix, chop, or freeze these up for a delicious fruity snack!" as this is only fruit based. 
 
@@ -60,6 +60,7 @@ Unfortunately there are still some bugs in the program regarding "creating recip
 Additionally, when adding a new container to enter new ingredients, the information from the previous child remains (including quantity) and only updates when adding the new fruit. I would have liked this to be empty initially, but failed to do so. 
 
 6. Future avenues
+   
 I would like to create a function that matches users with their profiles, but did not have time to do so. For example, if two users are "Strawberries", I would like for them to be able to match with the idea that they can bond over their mutual love of strawberries and similar "strawberry" personalities. 
 
 
