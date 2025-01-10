@@ -9,7 +9,7 @@ This is an app that accesses the https://www.fruityvice.com/ API which is a free
 
 https://www.fruityvice.com/api/fruit/kiwi/
 
-You can view al fruit here available here. 
+You can view all fruit here available here. 
 
 https://www.fruityvice.com/api/fruit/all/
 
