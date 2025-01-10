@@ -52,7 +52,7 @@ I made a JSON file for each fruit with a unique "Snapshot" and "Profile". The mo
 
 4. LOGIN/REGISTRATION 
 
-Login and registration was taken from Project 2: "Commerce", as the needed functionality was similar. Many functions were also modified from Project 2 to fit this app (such as viewing and filtering recipes). 
+Login and registration was taken from "Commerce", as the needed functionality was similar. Many functions were also modified from Project 2 to fit this app (such as viewing and filtering recipes). 
 
 5. Bugs in the program
 Unfortunately there are still some bugs in the program regarding "creating recipes". Most of these have to do with the Javascript auto-population. While the ingredients auto-populate with the correct nutritional information, it only captures the first quantity provided, and uses this for all fruits in a recipe. I tried many ways around this including a proteins = request.POST.getlist("quantity[]"), which works for the other categories. However, when using multiplying the nutritional content for the ingredient against said quantity, I would get a "list of out range error" that I was not able to resolve. 
@@ -65,7 +65,7 @@ I would like to create a function that matches users with their profiles, but di
 
 I hope you enjoy FruityPy!
 
-Please reach out to me at hmountcastle@hsph.harvard.edu with any questions. 
+Please reach out to me at haydenmountcastle@gmail.com with any questions. 
 
 You can view the video demonstrating functionality at the following link:
 
